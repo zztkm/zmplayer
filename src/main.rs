@@ -1,4 +1,7 @@
+use std::path::Path;
+
 use zmplayer::commands::Commands;
+use zmplayer::config::Config;
 
 fn main() -> noargs::Result<()> {
     let cmd = Commands::parse(std::env::args())?;
@@ -11,6 +14,12 @@ fn main() -> noargs::Result<()> {
         Commands::Init(init) => {
             // プロジェクトを初期化する
             println!("Initializing project...");
+            let config = Config {
+                music_dir: init.dir,
+                search_depth: init.search_depth, // 指定された探索深さ
+            };
+            // config ファイルを生成する
+            config.write_to_file(Path::new("config.init"))?;
         }
         Commands::Help(help) => {
             // ヘルプを表示する
@@ -19,17 +28,4 @@ fn main() -> noargs::Result<()> {
     }
 
     Ok(())
-}
-
-fn get_default_music_folder() -> String {
-    if cfg!(target_os = "windows") {
-        format!(
-            "{}\\Music",
-            std::env::var("USERPROFILE").unwrap_or_default()
-        )
-    } else if cfg!(target_os = "macos") || cfg!(target_os = "linux") {
-        format!("{}/Music", std::env::var("HOME").unwrap_or_default())
-    } else {
-        String::from("./music") // フォールバック
-    }
 }
