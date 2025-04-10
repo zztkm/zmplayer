@@ -4,6 +4,8 @@ pub struct Init {
     // 音楽フォルダのパス
     // デフォルトはシステムの Music フォルダを使用する
     pub dir: String,
+    // 音楽フォルダを探索する深さ
+    pub search_depth: u32,
 }
 
 pub enum Commands {
@@ -40,7 +42,15 @@ impl Commands {
                 .take(&mut args)
                 .is_present();
             let dir = noargs::opt("dir").default(".").take(&mut args).parse()?;
-            Some(Commands::Init(Init { force, dir }))
+            let search_depth = noargs::opt("search_depth")
+                .default("4")
+                .take(&mut args)
+                .parse::<u32>()?;
+            Some(Commands::Init(Init {
+                force,
+                dir,
+                search_depth,
+            }))
         } else {
             args.metadata_mut().help_mode = true;
             None
