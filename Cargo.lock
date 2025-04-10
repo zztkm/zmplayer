@@ -572,6 +572,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "orfail"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aba2212a0fddd290c8209fb9b0393382435ede29c24a71f245d7fa92f0f3442e"
+
+[[package]]
 name = "pkg-config"
 version = "0.3.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1129,6 +1135,7 @@ name = "zmplayer"
 version = "0.1.0"
 dependencies = [
  "noargs",
+ "orfail",
  "rodio",
  "rust-ini",
 ]

@@ -6,5 +6,6 @@ edition = "2024"
 
 [dependencies]
 noargs = "0.2.0"
+orfail = "1.1.0"
 rodio = "0.20.1"
 rust-ini = "0.21.1"
