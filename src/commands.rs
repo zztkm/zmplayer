@@ -34,18 +34,22 @@ impl Commands {
         noargs::HELP_FLAG.take_help(&mut args);
 
         // コマンドの解析
-        let cmd: Option<Commands> = if noargs::cmd("run").take(&mut args).ok().is_some() {
+        let cmd: Option<Commands> = if noargs::cmd("run").take(&mut args).present().is_some() {
             Some(Commands::Run)
-        } else if noargs::cmd("init").take(&mut args).ok().is_some() {
+        } else if noargs::cmd("init").take(&mut args).present().is_some() {
             let force = noargs::flag("force")
                 .doc("Force initialization")
                 .take(&mut args)
                 .is_present();
-            let dir = noargs::opt("dir").default(".").take(&mut args).parse()?;
+            let dir = noargs::opt("dir")
+                .default(".")
+                .take(&mut args)
+                .then(|opt| opt.value().parse())?;
             let search_depth = noargs::opt("search_depth")
                 .default("4")
                 .take(&mut args)
-                .parse::<u32>()?;
+                .then(|opt| opt.value().parse())?;
+
             Some(Commands::Init(Init {
                 force,
                 dir,

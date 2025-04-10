@@ -468,9 +468,9 @@ dependencies = [
 
 [[package]]
 name = "noargs"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "64cf55508d4657f634cc0a40b190c3975e10fb3a50eb2bd088b666014c3496aa"
+checksum = "7a823329c7c4b4955b37f04f38b0a56dae5f5fb3aecda2c2eebfcb51ece4727a"
 
 [[package]]
 name = "nom"
@@ -1114,9 +1114,9 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 
 [[package]]
 name = "winnow"
-version = "0.7.4"
+version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e97b544156e9bebe1a0ffbc03484fc1ffe3100cbce3ffb17eac35f7cdd7ab36"
+checksum = "63d3fcd9bba44b03821e7d699eeee959f3126dcc4aa8e4ae18ec617c2a5cea10"
 dependencies = [
  "memchr",
 ]
