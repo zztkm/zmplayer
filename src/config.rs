@@ -11,6 +11,15 @@ pub struct Config {
     pub search_depth: u32,
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            music_dir: PathBuf::from(get_default_music_folder()),
+            search_depth: DEFAULT_SEARCH_DEPTH,
+        }
+    }
+}
+
 impl Config {
     /// config ファイルから設定を読み込む関数
     pub fn parse(file_path: &Path) -> Result<Self> {

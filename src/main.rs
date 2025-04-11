@@ -11,14 +11,25 @@ fn main() -> noargs::Result<()> {
         Commands::Run => {
             // 音楽プレイヤーを実行する
             println!("Running music player...");
-            // ここに音楽プレイヤーを実行するコードを追加
-            Config::parse(&get_config_path())
-                .and_then(|config| {
-                    let mut player = Player::new(config)?;
-                    player.show_config();
-                    player.run()
-                })
-                .or_fail()?;
+            let config_path = get_config_path();
+            let config = if config_path.exists() {
+                Config::parse(&config_path).or_fail()?
+            } else {
+                // Config が存在しない場合は、デフォルトの Config を作成し、保存する
+                let config = Config::default();
+                config.write_to_file(&config_path).or_fail()?;
+                config
+            };
+            if !config_path.exists() {
+                // Config を自動生成して、保存する
+                let config = Config::default();
+                config.write_to_file(&config_path).or_fail()?;
+                println!("Config file created at: {}", config_path.display());
+            }
+
+            let player = Player::new(config)?;
+            player.show_config();
+            player.run().or_fail()?
         }
         Commands::Init(init) => {
             // プロジェクトを初期化する

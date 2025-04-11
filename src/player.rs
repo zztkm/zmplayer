@@ -45,7 +45,7 @@ impl Player {
     }
 
     /// 音楽プレイヤーを実行する
-    pub fn run(&mut self) -> Result<()> {
+    pub fn run(&self) -> Result<()> {
         for file_path in &self.file_paths {
             let file = std::fs::File::open(file_path).or_fail()?;
             println!("adding: {}", file_path.display());
