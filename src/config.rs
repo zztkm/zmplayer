@@ -1,12 +1,12 @@
 use ini::Ini;
 use orfail::{Failure, OrFail, Result};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 const DEFAULT_SEARCH_DEPTH: u32 = 4;
 
 pub struct Config {
     /// 音楽フォルダのパス
-    pub music_dir: String,
+    pub music_dir: PathBuf,
     /// 音楽フォルダを探索する深さ
     pub search_depth: u32,
 }
@@ -21,10 +21,12 @@ impl Config {
             Some(s) => s,
             None => return Err(Failure::new("Failed to load config file".to_string())),
         };
-
         let music_dir = match root.get("music_dir") {
-            Some(dir) => dir.to_string(),
-            None => get_default_music_folder(),
+            Some(dir) => {
+                println!("Music Directory dir: {}", dir);
+                PathBuf::from(dir)
+            }
+            None => PathBuf::from(get_default_music_folder()),
         };
 
         let search_depth = match root.get("search_depth") {
@@ -42,13 +44,16 @@ impl Config {
     pub fn write_to_file(&self, file_path: &Path) -> Result<()> {
         let mut config = Ini::new();
         config
-            .with_section(Some("zmplayer"))
-            .set("music_dir", self.music_dir.clone());
+            .with_section(None::<String>)
+            .set("music_dir", self.music_dir.to_string_lossy().to_string());
         config
-            .with_section(Some("zmplayer"))
+            .with_section(None::<String>)
             .set("search_depth", self.search_depth.to_string());
 
-        // TODO: write_to_file の返り値をそのまま返せばよくね？
+        // フォルダ、ファイルが存在しない場合は作成する
+        if !file_path.exists() {
+            std::fs::create_dir_all(file_path.parent().unwrap()).or_fail()?;
+        }
         config.write_to_file(file_path).or_fail()
     }
 }
