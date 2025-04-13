@@ -2,12 +2,13 @@ use ini::Ini;
 use orfail::{Failure, OrFail, Result};
 use std::path::{Path, PathBuf};
 
-const DEFAULT_SEARCH_DEPTH: u32 = 4;
+// / 音楽フォルダを検索する深さのデフォルト値
+pub const DEFAULT_SEARCH_DEPTH_STR: &str = "4";
 
 pub struct Config {
     /// 音楽フォルダのパス
     pub music_dir: PathBuf,
-    /// 音楽フォルダを探索する深さ
+    /// 音楽ディレクトリを探索する深さ
     pub search_depth: u32,
 }
 
@@ -15,7 +16,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             music_dir: PathBuf::from(get_default_music_folder()),
-            search_depth: DEFAULT_SEARCH_DEPTH,
+            search_depth: DEFAULT_SEARCH_DEPTH_STR.parse().unwrap(),
         }
     }
 }
@@ -40,7 +41,7 @@ impl Config {
 
         let search_depth = match root.get("search_depth") {
             Some(depth) => depth.parse::<u32>().or_fail()?,
-            None => DEFAULT_SEARCH_DEPTH,
+            None => DEFAULT_SEARCH_DEPTH_STR.parse().unwrap(),
         };
 
         Ok(Self {
@@ -68,7 +69,7 @@ impl Config {
 }
 
 /// 音楽フォルダのデフォルトパスを取得する関数
-fn get_default_music_folder() -> String {
+pub fn get_default_music_folder() -> String {
     if cfg!(target_os = "windows") {
         format!(
             "{}\\Music",

@@ -1,3 +1,5 @@
+use crate::config::{DEFAULT_SEARCH_DEPTH_STR, get_default_music_folder};
+
 pub struct Init {
     // 強制的に初期化するかどうか
     pub force: bool,
@@ -41,12 +43,17 @@ impl Commands {
                 .doc("Force initialization")
                 .take(&mut args)
                 .is_present();
+            // デフォルト値を&'static str に変換するために Box::leak を使用
+            // メモリを意図的にリークすることで 'static なライフタイムを持つ文字列を作成することができるというテクニック (らしい)
+            // refs: https://stackoverflow.com/questions/23975391/how-to-convert-a-string-into-a-static-str
             let dir = noargs::opt("dir")
-                .default(".")
+                .doc("音楽ディレクトリのパス")
+                .default(Box::leak(get_default_music_folder().into_boxed_str()))
                 .take(&mut args)
                 .then(|opt| opt.value().parse())?;
             let search_depth = noargs::opt("search_depth")
-                .default("4")
+                .doc("音楽ディレクトリを探索する深さ")
+                .default(DEFAULT_SEARCH_DEPTH_STR)
                 .take(&mut args)
                 .then(|opt| opt.value().parse())?;
 
