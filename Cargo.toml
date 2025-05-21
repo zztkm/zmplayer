@@ -1,12 +1,11 @@
 [package]
-name = "zmplayer"
-description = "A simple music player"
+name = "ratatui-hello-world"
 version = "0.1.0"
-edition = "2024"
+authors = ["Jules <agent@example.com>"] # You can replace this with actual author info if desired
+license = "MIT"
+edition = "2021"
 
 [dependencies]
-noargs = "0.3.0"
-orfail = "1.1.0"
-rodio = "0.20.1"
-rust-ini = "0.21.1"
-walkdir = "2.5.0"
+color-eyre = "0.6.3"
+crossterm = "0.27.0" # Using version from tutorial, can be updated if needed
+ratatui = "0.26.0" # Using version from tutorial, can be updated if needed
